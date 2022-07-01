@@ -169,9 +169,21 @@ var UIcontroller = (function() {
       return {
         type: document.querySelector(DOMstrings.inputType).value,
         description: document.querySelector(DOMstrings.inputDescription).value,
-        
+        value: parseFloat(document.querySelector(DOMstrings.inputValue).value)
 
+      };
+    },
+
+    addListItem: function(obj, type) {
+      var html, newHtml, element;
+
+      if(type === 'inc') {
+        element = DOMstrings.incomeContainer;
+
+        html = '<div class="item clearfix" id="inc-%id%"> <div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+      } else if(type === 'exp') {
+        
       }
-    }
+    } 
   }
 })
