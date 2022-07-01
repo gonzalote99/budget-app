@@ -202,8 +202,37 @@ var UIcontroller = (function() {
     },
 
     clearFields: function() {
-      
-    }
+      var fields, fieldsArr;
 
+      fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputValue);
+
+      fieldsArr = Array.prototype.slice.call(fields);
+
+      fieldsArr.forEach(function(current, index, array) {
+        current.value = "";
+      });
+      fieldsArr[0].focus();
+    },
+
+    displayBudget: function(obj) {
+      var type;
+      obj.budget > 0 ? type = 'inc' : type = 'exp';
+
+      document.querySelector(DOMstrings.budgetLabel).textContent = formatNumber(obj.budget, type);
+      document.querySelector(DOMstrings.incomeLabel).textContent = formatNumber(obj.totalInc, 'inc');
+      document.querySelector(DOMstrings.expensesLabel).textContent = formatNumber(obj.totalExp, 'exp');
+
+      if (obj.percentage > 0) {
+        document.querySelector(DOMstrings.percentageLabel).textContent = obj.percentage = '%';
+
+      } else {
+        document.querySelector(DOMstrings.percentageLabel).textContent =  '---';
+      }
+    },
+    
+    
+    
   }
+
+
 })
