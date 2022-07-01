@@ -78,9 +78,100 @@ var budgetController = (function() {
       }
     },
 
+    calculateBudget: function() {
+      calculateTotal('exp');
+      calculateTotal('inc');
+
+      data.budget = data.totals.inc - data.totals.exp;
+
+      if(data.totals.inc > 0) {
+        data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100);
+
+      } else {
+        data.percentage = -1;
+      }
+    },
+
+    calculatePercentages: function() {
+
+      datal.allItems.exp.forEach(function(cur) {
+        cur.calcPercentage(data.totals.inc)
+      });
+    },
     
+    getPercentages: function() {
+     var allPerc = data.allItems.exp.map(function(cur) {
+       return cur.getPercentage();
+     });
+     return allPerc;
+    },
+
+    getBudget: function() {
+      return {
+        budget: data.budget,
+        totalInc: data.totalInc,
+        totalExp: data.totalExp,
+        percentage: data.percentage
+
+      };
+    },
+
+    testing: function() {
+      console.log(data);
+    }
+
+  };
+
+})();
+
+var UIcontroller = (function() {
+  var DOMstrings = {
+    inputType: '.add__type',
+    inputDescription: '.add__description',
+    inputValue: '.add__value',
+    inputBtn: '.add__btn',
+    incomeContainer: '.income__list',
+    expensesContainer: '.expenses__list',
+    budgetLabel: '.budget__value',
+    incomeLabel: 'budget__income--value',
+    percentageLabel: '.budget__expenses--percentage',
+    container: '.container',
+    expensesPercLabel: '.item__percentage',
+    dateLabel: '.budget__title--month'
 
 
+  };
+
+  var formatNumber = function(num, type) {
+    var numSplit, int, dec, type;
+
+    num = Math.abs(num);
+    num = num.toFixed(2);
+
+    numSplit = num.split('.');
+
+    int = numSplit[0];
+    if (int.length > 3 ) {
+      int = int.substr(0, int.length - 3 ) + ',' + int.substr(int.length -3, 3);
+    }
+    dec = numSplit[1];
+
+    return (type === 'exp' ? '-' : '+') + '' + int + '.' + dec;
+  };
+
+  var nodeListForEach = function(list, callback) {
+    for (var i = 0; i < list.length; i++ ) {
+      callback(list[i], i);
+    }
+  };
+  return {
+    getInput: function() {
+      return {
+        type: document.querySelector(DOMstrings.inputType).value,
+        description: document.querySelector(DOMstrings.inputDescription).value,
+        
+
+      }
+    }
   }
-
 })
