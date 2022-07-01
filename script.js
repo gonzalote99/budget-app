@@ -189,7 +189,21 @@ var UIcontroller = (function() {
 
       }
 
-      newHtml = html.replace()
-    } 
+      newHtml = html.replace('%id%', obj.id);
+      newHtml = newHtml.replace('%description%', obj.description);
+      newHtml = newHtml.replace('%value%', formatNumber(obj.value, type));
+
+      document.querySelector(element).insertAdjacentElement('beforeend', newHtml );
+    },
+    
+    deleteListItem: function(selectorID){
+      var el = document.getElementById(selectorID);
+      el.parentNode.removeChild(el);
+    },
+
+    clearFields: function() {
+      
+    }
+
   }
 })
