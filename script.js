@@ -229,10 +229,122 @@ var UIcontroller = (function() {
         document.querySelector(DOMstrings.percentageLabel).textContent =  '---';
       }
     },
-    
-    
-    
-  }
 
+    displayPercentages: function(percentages) {
+      var  fields = document.querySelectorAll(DOMstrings.expensesPercLabel);
+      nodeListForEach(fields, function(current, index) {
+        if (percentages[index] > 0) {
+          current.textContent = percentages[index] + '%';
+        } else {
+          current.textContent = '---';
+        }
+      });
+    },
+
+    displayMonth: function() {
+      var now, months, month, year;
+      now = new Date();
+
+      months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      month = now.getMonth();
+
+      year = now.getFullYear();
+      document.querySelector(DOMstrings.dateLabel).textContent = months[month] + ' ' + year;
+    },
+
+    changedType: function() {
+     var fields = document.querySelectorAll(
+       DOMstrings.inputType + ', ' +
+       DOMstrings.inputDescription + ',' +
+       DOMstrings.inputValue);
+
+       nodeListForEach(fields, function(cur) {
+         cur.classList.toggle('red-focus');
+       });
+
+       document.querySelector(DOMstrings.inputBtn).classList.toggle('red');
+     
+    },
+
+    getDomstrings: function() {
+      return DOMstrings;
+    }
+
+
+    
+    
+    
+  };
+
+
+
+})();
+
+var controller = (function(budgetCtrl, UICtrl) {
+  var setupEventListeners = function() {
+    var DOM = UICtrl.getDomstrings();
+
+    document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
+
+    document.addEventListener('keypress', function(event) {
+      if (event.keyCode === 13 || event.which === 13) {
+        ctrlAddItem();
+      }
+    });
+
+    document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+    document.querySelector(Dom.inputType).addEventListener('change', UICtrl.changedType);
+
+  };
+
+  var updateBudget = function() {
+   
+    budgetCtrl.calculateBudget();
+
+    var budget = calculateBudget.getBudget();
+
+    UICtrl.displayBudget(budget);
+  };
+
+  var updatePercentages = function(){
+    budgetCtrl.calculatePercentages();
+
+    var percentages = budgetCtrl.getPercentages();
+    
+    UICtrl.displayPercentages(percentages);
+
+
+  };
+
+  var ctrlAddItem = function() {
+    var input, newItem;
+
+    input = UICtrl.getInput();
+
+    if(input.description !== "" && !isNaN(input.value) && input.value > 0){
+
+      newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+
+      UICtrl.addListItem(newItem, input.type);
+
+      UICtrl.clearFields();
+
+      updateBudget();
+      updatePercentages();
+
+    }
+
+
+  };
+
+  var ctrlDeleteItem = function(event) {
+   var itemID, splitID, type, ID;
+
+   itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
+
+   if(itemID) {
+     
+   }
+  }
 
 })
